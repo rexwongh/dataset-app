@@ -51,28 +51,61 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'yarn' # or 'npm' / 'pnpm'
+          cache: 'yarn'
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - name: Install dependencies (ubuntu only)
+      # ============================================
+      # OpenCV Installation (per platform)
+      # ============================================
+
+      - name: Install OpenCV (Ubuntu)
         if: matrix.platform == 'ubuntu-22.04'
-        # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
           sudo apt-get update
+          sudo apt-get install -y libopencv-dev clang libclang-dev
+
+      - name: Install OpenCV (macOS)
+        if: matrix.platform == 'macos-latest'
+        run: |
+          brew install opencv
+
+      - name: Install OpenCV (Windows)
+        if: matrix.platform == 'windows-latest'
+        run: |
+          # Install LLVM (required for opencv-rust bindgen)
+          choco install llvm -y
+
+          # Install OpenCV via vcpkg
+          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
+          C:\vcpkg\bootstrap-vcpkg.bat
+          C:\vcpkg\vcpkg install opencv4:x64-windows
+
+          # Set environment variables for opencv-rust
+          echo "OPENCV_LINK_LIBS=opencv_world4" >> $env:GITHUB_ENV
+          echo "OPENCV_LINK_PATHS=C:\vcpkg\installed\x64-windows\lib" >> $env:GITHUB_ENV
+          echo "OPENCV_INCLUDE_PATHS=C:\vcpkg\installed\x64-windows\include" >> $env:GITHUB_ENV
+          echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
+
+      # ============================================
+      # Tauri dependencies (per platform)
+      # ============================================
+
+      - name: Install Tauri dependencies (Ubuntu)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev
 
       - name: Install frontend dependencies
-        run: yarn install # change this to npm install or pnpm install if needed
+        run: yarn install
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          releaseId: ${{ needs.create_release.outputs.release_id }}
+          releaseId: ${{ needs.create-release.outputs.release_id }}
           args: ${{ matrix.args }}

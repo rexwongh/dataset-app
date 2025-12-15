@@ -1505,9 +1505,10 @@ event-emitter@^0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-"exif-js@https://github.com/exif-js/exif-js.git":
+exif-js@^2.3.0:
   version "2.3.0"
-  resolved "git+ssh://git@github.com/exif-js/exif-js.git#51a8f7d2f3aa71cb03463c84088067c9a4ebe8cb"
+  resolved "https://registry.yarnpkg.com/exif-js/-/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
+  integrity sha512-1Og9pAzG2FZRVlaavH8bB8BTeHcjMdJhKmeQITkX+uLRCD0xPtKAdZ2clZmQdJ56p9adXtJ8+jwrGp/4505lYg==
 
 ext@^1.7.0:
   version "1.7.0"

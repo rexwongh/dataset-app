@@ -15,7 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # 使用 PAT 而非 GITHUB_TOKEN，這樣推送的 tag 才能觸發 build workflow
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Extract Version from README
         id: readme_version

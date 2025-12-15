@@ -2,7 +2,7 @@
 
 A desktop application for exploring and processing image datasets annotated in LabelMe, with tools for visualization, conversion to YOLO, label extraction, basic auto-annotation, and crop/remap utilities. Built with SvelteKit (frontend) and Tauri v2 (Rust backend).
 
-**Version**: 0.2.0
+**Version**: 0.3.0
 
 ## Status and Caution
 - This project is under rapid development.

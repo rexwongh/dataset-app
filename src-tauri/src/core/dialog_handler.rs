@@ -1,4 +1,4 @@
-use native_dialog::{DialogError, FileDialog};
+use native_dialog::FileDialog;
 
 pub struct DialogHandler;
 

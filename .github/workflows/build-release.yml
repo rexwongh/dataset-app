@@ -34,10 +34,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest' # for Arm64
+          - platform: 'macos-latest' # for Arm64 (Apple Silicon)
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel
-            args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-22.04' # for Linux
             args: ''
           - platform: 'windows-latest' # for Windows
@@ -91,6 +89,8 @@ jobs:
           choco install llvm -y
 
           # Install OpenCV via vcpkg
+          # 先刪除可能已存在的 vcpkg 目錄（GitHub runner 可能預裝了）
+          rm -rf /c/vcpkg
           git clone https://github.com/microsoft/vcpkg.git /c/vcpkg
           /c/vcpkg/bootstrap-vcpkg.bat
           /c/vcpkg/vcpkg install opencv4:x64-windows

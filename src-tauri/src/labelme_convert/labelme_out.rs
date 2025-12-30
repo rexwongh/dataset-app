@@ -133,7 +133,7 @@ fn convert_2point_to_4point(shape: &Shape) -> Option<Shape> {
         return None;
     }
     let bbox = BoundingBox::from_points(&shape.points)?;
-    Some(shape.with_new_geometry(bbox.to_4point(), "polygon"))
+    Some(shape.with_new_geometry(bbox.to_4point(), "rectangle"))
 }
 
 /// Convert a 4-point polygon to a 2-point rectangle (strict: must be axis-aligned)
@@ -163,7 +163,7 @@ fn convert_polygon_to_4point(shape: &Shape) -> Option<Shape> {
         return None;
     }
     let bbox = BoundingBox::from_points(&shape.points)?;
-    Some(shape.with_new_geometry(bbox.to_4point(), "polygon"))
+    Some(shape.with_new_geometry(bbox.to_4point(), "rectangle"))
 }
 
 /// Check if a 4-point shape is an axis-aligned rectangle
